@@ -3,14 +3,17 @@ from .locators import ProductPageLocators
 
 class ProductPage(BasePage):
     def add_to_basket(self):
+        assert self.is_element_present(*ProductPageLocators.ADD_TO_BASKET_BUTTON), "No basket button"
         add_to_basket = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON)
         add_to_basket.click()
 
     def get_price_from_success_alert(self):
+        assert self.is_element_present(*ProductPageLocators.ITEM_ADDED_SUCCESS_ALERT_BASKET_TOTAL_PRICE), "No price success alert after adding item"
         price = self.browser.find_element(*ProductPageLocators.ITEM_ADDED_SUCCESS_ALERT_BASKET_TOTAL_PRICE)
         return price.text
 
     def get_item_name_from_success_alert(self):
+        assert self.is_element_present(*ProductPageLocators.ITEM_ADDED_SUCCESS_ALERT_BASKET_TOTAL_PRICE), "No item name success alert after adding item"
         item_name = self.browser.find_element(*ProductPageLocators.ITEM_ADDED_SUCCESS_ALERT_ITEM)
         return item_name.text
     
@@ -18,4 +21,4 @@ class ProductPage(BasePage):
         assert self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text == self.get_price_from_success_alert(), "prices are not equal"
 
     def are_names_equal_on_success(self):
-        assert self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text in self.get_item_name_from_success_alert(), "names are not equal"
+        assert self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text == self.get_item_name_from_success_alert(), "names are not equal"
