@@ -22,3 +22,9 @@ class ProductPage(BasePage):
 
     def are_names_equal_on_success(self):
         assert self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text == self.get_item_name_from_success_alert(), "names are not equal"
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.ITEM_ADDED_SUCCESS_ALERT), "Success message is presented, but should not be"
+    
+    def should_not_dissappear_success_alert(self):
+        assert self.is_disappeared(*ProductPageLocators.ITEM_ADDED_SUCCESS_ALERT)
