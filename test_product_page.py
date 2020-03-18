@@ -3,9 +3,35 @@ from pages.product_page import ProductPage
 from pages.login_page import LoginPage
 from pages.basket_page import BasketPage
 import time
+from helpers import generate_email_and_password
 
 URL = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
 URL_mod = "http://selenium1py.pythonanywhere.com/catalogue/the-city-and-the-stars_95/"
+REG_URL = "http://selenium1py.pythonanywhere.com/accounts/login"
+
+@pytest.mark.smoke
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        page = LoginPage(browser, REG_URL)
+        page.open()
+        page.should_be_login_page()
+        page.register_new_user(*generate_email_and_password())
+        page.should_be_authorized_user()
+        yield
+
+    def test_user_can_add_product_to_basket(self, browser):
+        page = ProductPage(browser, URL)
+        page.open()
+        page.add_to_basket()
+        page.are_prices_equal_on_success()
+        page.are_names_equal_on_success()
+
+    def test_user_cant_see_success_message(self, browser):
+        page = ProductPage(browser, URL)
+        page.open()
+        page.should_not_be_success_message()
+
 
 @pytest.mark.skip
 @pytest.mark.parametrize('offers', [f'?promo=offer{offer}' for offer in range(10) if offer != 7] + [
