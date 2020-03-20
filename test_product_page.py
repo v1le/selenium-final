@@ -21,6 +21,7 @@ class TestUserAddToBasketFromProductPage():
         page.should_be_authorized_user()
         yield
 
+    @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser):
         page = ProductPage(browser, BASE_URL + PRODUCT_URL)
         page.open()
